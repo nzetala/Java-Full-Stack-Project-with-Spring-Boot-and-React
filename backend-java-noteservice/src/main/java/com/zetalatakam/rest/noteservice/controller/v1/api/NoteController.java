@@ -1,26 +1,62 @@
 package com.zetalatakam.rest.noteservice.controller.v1.api;
 
 import com.zetalatakam.rest.noteservice.model.Note;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import com.zetalatakam.rest.noteservice.repositrory.NoteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @RestController
+//TODO Set the url which can access to this Controller
+//@CrossOrigin(origins = "http://localhost:4200")
 public class NoteController {
 
-    @GetMapping("/hello-word/{id}")
-    public Note getNote(@PathVariable String id){
-        ZoneId defaultZoneId = ZoneId.systemDefault();
-        LocalDate localDate = LocalDate.of(2016, 8, 19);
-        LocalDate localDate2 = LocalDate.of(2021, 8, 19);
+    @Autowired
+    private NoteRepository noteRepository;
 
-        return new Note("malice á la plage","nelson01","Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",false, Date.from(localDate.atStartOfDay(defaultZoneId).toInstant()),Date.from(localDate2.atStartOfDay(defaultZoneId).toInstant()));
+    @GetMapping("/users/{username}")
+    public List<Note> getNotes(@PathVariable String username){
+        return noteRepository.findByUsername(username);
+    }
+    @GetMapping("/users/{username}/notes/{id}")
+    public Note getNote(@PathVariable String username, @PathVariable long id){
+        return noteRepository.findById(id).get();
     }
 
+    @DeleteMapping("/users/{username}/notes/{id}")
+    public ResponseEntity<Void> deleteNote(@PathVariable String username, @PathVariable long id) {
 
+        noteRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/users/{username}/notes/{id}")
+    public ResponseEntity<Note> updateNote(@PathVariable String username, @PathVariable long id,
+                                           @RequestBody Note note) {
+        //TODO test this next line
+        note.setUsername(username);
+        Note updatedNote = noteRepository.save(note);
+        return new ResponseEntity<Note>(updatedNote, HttpStatus.OK);
+    }
+
+    @PostMapping("/users/{username}")
+    public ResponseEntity<Note> createNote(@PathVariable String username,
+                                           @RequestBody Note note) {
+        note.setUsername(username);
+        Note createdNote = noteRepository.save(note);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(createdNote.getNoteId()).toUri();
+
+        return  ResponseEntity.created(uri).build();
+    }
 
 }

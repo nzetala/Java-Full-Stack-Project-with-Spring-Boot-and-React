@@ -52,9 +52,6 @@ public class Spring_boot_H2_test {
             assertTrue(listOfRetrieved.isEmpty());
         }
 
-
-
-
     }
 
     private Note getNote() {
