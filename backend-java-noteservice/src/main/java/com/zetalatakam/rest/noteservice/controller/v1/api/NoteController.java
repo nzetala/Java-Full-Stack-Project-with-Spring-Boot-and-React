@@ -18,7 +18,7 @@ public class NoteController {
         LocalDate localDate = LocalDate.of(2016, 8, 19);
         LocalDate localDate2 = LocalDate.of(2021, 8, 19);
 
-        return new Note(Long.valueOf(id),"malice á la plage","nelson01",false, Date.from(localDate.atStartOfDay(defaultZoneId).toInstant()),Date.from(localDate2.atStartOfDay(defaultZoneId).toInstant()));
+        return new Note("malice á la plage","nelson01","Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",false, Date.from(localDate.atStartOfDay(defaultZoneId).toInstant()),Date.from(localDate2.atStartOfDay(defaultZoneId).toInstant()));
     }
 
 

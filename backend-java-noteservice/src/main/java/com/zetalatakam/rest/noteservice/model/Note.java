@@ -13,6 +13,7 @@ public class Note {
     private Long noteId;
     private String noteName;
     private String username;
+    private String contentText;
     private boolean isFavorite;
     private Date createdDate;
     private Date lastUpdateDate;
@@ -20,10 +21,10 @@ public class Note {
     public Note() {
     }
 
-    public Note(Long noteId, String noteName, String username, boolean isFavorite, Date createdDate, Date lastUpdateDate) {
-        this.noteId = noteId;
+    public Note( String noteName, String username,String contentText, boolean isFavorite, Date createdDate, Date lastUpdateDate) {
         this.noteName = noteName;
         this.username = username;
+        this.contentText=contentText;
         this.isFavorite = isFavorite;
         this.createdDate = createdDate;
         this.lastUpdateDate = lastUpdateDate;
@@ -31,6 +32,14 @@ public class Note {
 
     public Long getNoteId() {
         return noteId;
+    }
+
+    public String getContentText() {
+        return contentText;
+    }
+
+    public void setContentText(String contentText) {
+        this.contentText = contentText;
     }
 
     public String getNoteName() {
